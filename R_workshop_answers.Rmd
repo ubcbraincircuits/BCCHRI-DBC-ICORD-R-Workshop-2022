@@ -1,0 +1,412 @@
+# How do R-markdown files work?
+The script you currently have loaded is a special kind of R script called a markdown file. R-markdown is a powerful tool for integrating R-code into documents and websites, but for now we are just using it as a convenient scripting format. 
+Everything in this white area is part of the markdown section of the Rmarkdown file. This means that it is just plain text that cannot be run in R. Now let's create a coding section. We are going to create a block of code using three grave accents (this thing ` in the upper left corner) and {r}
+```{r}
+# everything in this grey box can be run by the R coding language. 
+# If we want to put any notes into these coding blocks, we need to turn them into comments 
+# by starting the line with a hashtag#
+
+# Let's actually make something we can run now and run it by hitting the green arrow at the top of the block
+2+2
+
+# You should be able to see the output below and in the console window. 
+```
+
+Hitting the green arrow at the top of the block will run everything in the block, but we can also still run things line by line. We can run just one line of code by hitting command + return on a Mac or control + enter for Windows and Linux. 
+
+```{r}
+# Run just the 3+6 command below be selecting the line and hitting command+enter.  
+20+40
+3+6
+17+31
+
+# This is how we are usually going to run the code in our blocks. 
+```
+
+Ok, now let's learn how to actually do some stuff with R. 
+
+# Packages:
+R has many useful built in tools, but the true beauty of R is in its open-source packages. There is an R package for basically every problem you can imagine, you just need to figure out what the package is called and how it works. Today, we will be working with the tidyverse suite of packages. Tidyverse is a large set of packages that are all related to data analysis and and all share a common data organization philosophy, so that they all work in harmony. For example, the ggplot2 package that we will be using later is part of tidyverse. You can find more information here https://www.tidyverse.org/ 
+
+There are a couple of steps to using a package like tidyverse. First, you need to install the tidyverse by running:
+'install.packages("tidyverse")'
+In the console. You only need to run this ONE time and tidyverse will be on your computer forever.
+
+```{r}
+#Second, you need to load the package into your Rsession using the library command.
+library(tidyverse)
+# You have to run this every time you open up RStudio. 
+```
+
+# Defining Variables:
+Whenever we calculate or create something in R, we can save what we made as a variable to be used later. We do this by specifying a variable name and then setting it as equal to something else. This can be done either by using an equal (=) sign or an arrow (<-). I personally prefer equals signs. 
+
+```{r}
+# Assigning a variable with an equals sign.
+x = 2+2
+
+# We have saved the output of 2+2 in a variable called x, now we can use the variable in further equations.
+10 + x
+```
+
+# Creating and working with vectors:
+Vectors are one of the most simple and common ways to store data in R. For our purposes, a vector is essentially like a list of things such as numbers. 
+
+```{r}
+# Let's create a vector and store it in a variable using the c() command. 
+vec = c(1,2,3,4,5,6,7)
+
+# Once we have created our vector, we can select values from our vector using square brackets
+
+vec[1] # selects the first value in the vector.
+```
+
+# Functions 1: Common Functions
+Ok, so we have done some basic addition and looked at how vectors work in R. Now let's learn how to do something more interesting in R. We can use functions to complete a variety of tasks in R that range from simple things like calculating means to performing incredibly complicated computational analyses. Some of these functions are built directly into R, but the most useful functions are only available through packages such as tidyverse. 
+
+Let's use some basic functions to calculate the mean and standard deviation of that small vector we made earlier. 
+
+```{r}
+# Calculating the mean. 
+mean(vec)
+
+# Calculating the standard deviation.
+sd(vec)
+```
+
+# Functions 2: The Help Function and Function Argument Inputs
+The single most important function in R is the help() function. This can be used to get information on any of the other functions in R. Try running help() on the mean function we used earlier. A window should pop up on the lower right. 
+
+```{r}
+help(mean)
+```
+
+even for a simple function like mean, there is a lot of information here. The most important sections are Usage and Arguments. Usage will show you how the function should look when it is typed into the console or script. Usage also shows you what the default values are for each argument. The arguments section explains all of the difference arguments of the function. It explains to you what the different arguments do and what those arguments can accept as inputs. This is probably a good time to explain the different ways you can specify argument inputs. 
+
+```{r}
+# Let's create another vector real quick. 
+vec2=c(1,2,5,4,7,3,NA,4,3,6,7,5,2,9,5)
+
+# If we want to calculate the mean of our vector while trimming off 10% of the observations and removing the NA value, we can either:
+
+# A) put all of the inputs directly into the function IN ORDER
+mean(vec2,0.1,TRUE)
+
+# B) specify the values we want for each argument in any order we like.
+mean(x=vec2, trim = 0.1, na.rm = TRUE)
+mean(x=vec2, na.rm = TRUE, trim = 0.1)
+```
+
+# Question 1:
+Use the help command to look up how the quantile function works. After reading this, please calculate the quantiles of our vec2 vector using one of the continuous sample quantile types.  
+
+```{r}
+help("quantile")
+
+quantile(x = vec2, na.rm = TRUE, type = 4)
+```
+
+#Functions 3: Creating your own functions. 
+
+You can easily create your own function using the following format
+
+name = function(arguments) {
+Inner workings
+}
+
+Creating your own functions can allow you to create powerful tools that are specialized for your analysis workflow. However, creating meaningful functions requires an understanding a variety of other coding principles (e.g. for loops, if/else statements, etc) which are beyond the scope of this workshop. We hope to come back to the topic of making functions in future workshops. 
+
+# Dataframes 1: The Basics
+Vectors are a very simple way of storing data, but they are also very limited. Most of the time, we are going to be working with data that is stored in R dataframes. Dataframes are essentially just tables similar to the ones you might make in Microsoft excel.
+
+```{r}
+# Here is a super basic dataframe.
+data = data.frame(name=c("Sam","Mike"), height_cm=c(197,155))
+
+#let's take a look at it.
+print(data)
+
+# We can select one of our columns using dataframe$column_name
+data$height_cm
+
+# and we can select a row using dataframe[row_number,]
+data[1,]
+```
+
+Ok, now let's look at a more complicated table that has some relevance to biology:
+
+```{r}
+# Loading in a dataframe from a .csv file. 
+sleep_df = read.csv("sleep_data.csv")
+
+# let's take a look at this data in a separate tab. 
+view(sleep_df)
+```
+
+# Dataframes 2: Subsetting dataframes. 
+For any decently complex dataframe, we will inevitably want to subset that dataframe. We may wish to extract only the columns that are important for our analysis, or we may wish to look at data that meets certain criteria. There are multiple ways to complete both tasks, but today we will be doing everything using R's built in subset function. 
+
+```{r}
+# We can use the subset() function to subset our table in two different ways:
+# 1. Using the select argument of the subset function to grab specific columns from the dataframe. 
+subset(sleep_df, select = c(name, vore, bodywt))
+
+# 2. Using the subset argument and a relational operator to grab rows that meet a specific criteria.  
+subset(sleep_df, subset = (vore == "carni"))
+# ... Wait a second, what is a relational operator? 
+```
+
+## A side note on relational operators. 
+relational operators are small bits of code that return true or false answers depending on whether or not a certain condition has been met.  
+
+```{r}
+# Examples of relational operators:
+
+# Double equals sign is equal to. 
+2+2 == 4
+
+2+2 == 5
+
+# Exclamation mark equals sign is not equal to
+8 != 8
+
+# Greater than and lesser than. 
+8 > 4
+
+# relational operators can be linked together using '&' which represents an and statement. And statements will only be true if both conditions are met. 
+8 == 8 & 8 > 4
+
+8 == 8 & 8 > 12
+
+# relational operators can be linked together using '|' which represents an or statement. Or statements are true as long as at least one condition is met. 
+8 == 8 | 8 > 4
+
+8 == 8| 8 > 12
+```
+
+Alright, let's get back to subsetting. 
+
+```{r}
+# You can give multiple filtering parameters using the '&' symbol. 
+subset(sleep_df, subset = (vore == "carni" & order == "Cetacea"))
+
+# Using the '|' symbol let's you choose multiple categories from the same column.
+subset(sleep_df, subset = (vore == "carni" | vore == "omni"))
+
+# You can subset using the values in numeric columns as well. 
+subset(sleep_df, subset = (bodywt > 100))
+
+# Finally, you can combine the subset and select arguments to grab rows that meet a certain criteria and select specific columns at the same time. 
+sleepy_herbs = subset(sleep_df, subset = (vore == "herbi" & sleep_total > 13), select = c(name, order, sleep_total))
+print(sleepy_herbs)
+```
+
+# Question: 2
+Subset our sleep_df dataframe to create a dataframe that only includes primates with a brain mass greater than 0.1 KG. Select only the name, order, and brainwt columns to stay in your final dataframe. Save this dataframe as a variable named smrt_monkeys. 
+
+```{r}
+smrt_monkeys = subset(sleep_df, subset = (order == "Primates" & brainwt > 0.1), select = c(name,order,brainwt))
+print(smrt_monkeys)
+```
+
+# Dataframes 3: Analyzing and adding to dataframes.   
+Now that we understand how we can use subsetting to manipulate our data, let's learn how we can actually do something with that data. First, we are going to apply some of the functions we learned earlier to the columns of our sleep dataframe. 
+
+```{r}
+# calculating the average total sleep and the standard deviation of total sleep across different species.
+mean(sleep_df$sleep_total)
+
+sd(sleep_df$sleep_total)
+
+# calculating how long each species spends awake based on the sleep column. 
+awake = 24 - sleep_df$sleep_total
+
+# adding the awake column to our dataset. 
+sleep_df$awake = awake
+
+# After creating additional columns, we may want to save our altered dataframe to file using write.csv. 
+write.csv(sleep_df, "sleep_and_awake.csv", row.names = FALSE)
+```
+
+# Question 3
+ Calculate the ratio of brain wt to body weight for each animal, then add it as a new column to our dataframe, and then save that dataframe as a csv file. 
+
+```{r}
+wt_ratio = sleep_df$bodywt/sleep_df$brainwt
+sleep_df$wt_ratio = wt_ratio
+write.csv(sleep_df, "sleep_and_ratio.csv", row.names = FALSE)
+```
+
+# Dataframes 4: A brief discussion of combining dataframes. 
+
+In data science, we often find ourselves in situations where we need to combine multiple dataframes together. Due to the complexity of this topic, we will not be covering this in detail. However, we still want to describe a couple ways this can be done.
+
+- rbind(): rbind is short for row bind, and it allows us to literally stack tables that have the same column
+names on top of each other. This is often useful when working with multiple similar datasets (e.g. the same data collected from different years)
+    
+- Joins: A Join function merges two tables based on a certain "key" column that is present in both data tables. For example, you might have two tables that list different information from the same test subjects and you want to combine all of the data together based on the "subject_name" columns. 
+
+If you would like more information on how to combine dataframes, please see chapter 13.4 of the R for datascience online textbook: https://r4ds.had.co.nz/relational-data.html#mutating-joins. We also hope to cover this in a later tutorial. 
+
+#Plotting 1: ggplot basics. 
+R has some pretty good built in plotting software, but today we are going to be using the ggplot2 package from tidyverse to make our plots. There are a variety of minor reasons that ggplot2 is superior to R's built in plotting software, but the main reason we will be using ggplot2 today is because it is much easier to create visually impressive plots using ggplot2. 
+
+At it's core, their are three main things we need to consider when creating a ggplot:
+```{r}
+# First we initialize a ggplot. 
+ggplot()
+
+#Second, we select the data to plot and add on aesthetic mappings. 
+ggplot(data = sleep_df, mapping = aes(x = sleep_total, y = sleep_rem))
+
+# Third, we add a geometric object (geom) to tell gplot what kind of plot to make.
+ggplot(data = sleep_df, mapping = aes(x = sleep_total, y = sleep_rem)) + 
+  geom_point()
+
+# let's look at another kind of graph. 
+
+# A boxplot that conveys the average brain wt for each feeding habit. 
+ggplot(data = sleep_df, mapping = aes(x = vore, y = sleep_rem)) + 
+  geom_boxplot()
+```
+Here is a handy reference that includes all of the different geom names and the plots they make https://ggplot2.tidyverse.org/reference/
+
+# Plotting 2: Adding complexity. 
+
+Alright, now there are A LOT of ways to add complexity to these plots, so what we are going to do is we are going to take that first scatterplot we made and we are going to slowly add on more and more elements until we get something that is more informative. 
+
+```{r}
+# you can overlay several plots on top of each other by adding more geom layers.
+ggplot(data = msleep, aes(x = sleep_total, y = sleep_rem)) + 
+  geom_point(na.rm = TRUE) + 
+  geom_smooth(na.rm = TRUE, method = "loess")
+
+# We can change the color of our plots. 
+ggplot(data = msleep, aes(x = sleep_total, y = sleep_rem)) + 
+  geom_point(na.rm = TRUE, color = "red") + 
+  geom_smooth(na.rm = TRUE, color = "black", method = "loess")
+
+# Now let's add a title for our plot and some more informative axes labels
+ggplot(data = msleep, aes(x = sleep_total, y = sleep_rem)) + 
+  geom_point(na.rm = TRUE, color = "red") + 
+  geom_smooth(na.rm = TRUE, color = "black", method = "loess") +
+  labs(title = "Example Graph",
+       x = "Total Sleep (hours)",
+       y = "Rem Sleep (hours)")
+
+# At this point, our plot is looking pretty good. A great thing about ggplot is that we can actually save our graphs as variables and then add additional stuff to them later. Let's save our scatterplot so that we can use it in the next section.  
+our_graph = ggplot(data = msleep, aes(x = sleep_total, y = sleep_rem)) + 
+  geom_point(na.rm = TRUE, color = "red") + 
+  geom_smooth(na.rm = TRUE, color = "black", method = "loess") +
+  labs(title = "Example Graph",
+       x = "Total Sleep (hours)",
+       y = "Rem Sleep (hours)")
+```
+A link to a website with useful lists of color options: 
+https://www.r-graph-gallery.com/ggplot2-color.html 
+
+# Plotting 3: Making presentable graphs. 
+
+The graph we created at the end of the last section looked ok, but there are a lot of things I might want to change. For example, the grey box background does not look so nice, and the font style and size is not really my preference. In order to change these things, we will need to alter the themes of the plot. Themes are essentially responsible for controlling all the stuff about a plot that has nothing to do with the data or the labels of the plot. They are purely aesthetic. 
+
+There are two ways that we can alter theme:
+  1. By adding a new type of theme that will change the style of the whole graph. 
+  2. By altering specific parts of our theme to do things like adjust font sizes. 
+
+There are a few different themes built directly into ggplot2 which we will be using today. However, When one considers all of the additional themes that can be made available via additional packages, there are hundreds of themes to choose from. If you are ever have a very specific appearance for a graph in mind we suggest looking at additional packages such as ggthemes (https://yutannihilation.github.io/allYourFigureAreBelongToUs/ggthemes/) for more ideas. 
+
+```{r}
+# Adding a basic theme without any extra options. 
+our_graph +
+  theme_classic()
+
+# Adding options to our theme so we can change the font size and type. 
+our_graph +
+  theme_classic() +
+  theme(axis.title = element_text(size = 18)) + 
+  theme(plot.title = element_text(size = 22, hjust = 0.5)) +
+  theme(axis.text = element_text(size = 14))
+
+# You can also change the type of font you are using. You probably want to apply this to all the text rather than to each individual text element. 
+our_graph +
+  theme_classic() +
+  theme(axis.title = element_text(size = 18)) + 
+  theme(plot.title = element_text(size = 22, hjust = 0.5)) +
+  theme(axis.text = element_text(size = 14)) +
+  theme(text = element_text(family = "mono"))
+```
+R has an impressive total of 3 whole fonts built into it! If for some reason you require more fonts then this, you will have to utilize the extrafonts package which also requires you to downgrade another package. 
+"
+install.packages("extrafont")
+install.packages("remote")
+library(remotes)
+remotes::install_version("Rttf2pt1", version = "1.3.8")
+library(extrafont)
+font_import()
+fonts()
+"
+
+# Plotting 4: Saving plots 
+
+Once we have created a plot that we are happy with, we are going to want to svae it somewhere on our computer. The best way to do this is to use ggsave because it gives us some helpful options for saving graphs.
+
+```{r}
+# Saving our plot without making and alterations
+ggsave("my_graph_basic.png")
+
+# Saving our plot and altering width and height to change the aspect ratio.
+ggsave("my_graph_crunch.png", width = 3, height = 3)
+
+# The resolution of our plot can also be adjusted (The default resolution is 300 dpi).
+ggsave("my_graph_high_poly.png", dpi = 600)
+```
+
+# Question 4
+
+Create a dot plot with an overlayed violin plot to show the total sleep for animals with each feeding behavior (Use geom_jitter and geom_violin plot). Once you have created the basic plot, improve on it in the following ways:
+  - reduce the width of geom jitter to 0.1
+  - Change the jitter points to red.
+  - Add a title 
+  - Change the X and Y axis labels to "Feeding Behavior" and "Total Sleep (hours)" respectively
+  - Apply the classic theme 
+  - Increase the font sizes. 
+Finally, save the plot to on your computer. 
+
+```{r}
+ggplot(data = sleep_df, mapping = aes(x = vore, y = sleep_total)) + 
+  geom_violin() + 
+  geom_jitter(width = 0.1, color = "red") +
+  labs(title = "Example Graph",
+      x = "Feeding Behavior",
+      y = "Total Sleep (hours)") +
+  theme_classic() +
+  theme(axis.title = element_text(size = 16)) + 
+  theme(plot.title = element_text(size = 20, hjust = 0.5)) +
+  theme(axis.text = element_text(size = 12))
+ggsave("Q_4_graph.png")
+```
+
+# Running a statistical test.
+
+Let's finish of this workshop by quickly learning how to do a a t-test in R. Surprisingly enough, this is actually might be the easiest thing we are going to do today, as the t.test function in R does basically all of the work for us. 
+
+First I am going to show you how to complete the one sample t-test. Then, I am going to ask you to figure out how to do a two sample t-test. Just as a quick reminder:
+- A one sample t-test is used to test if the mean of our sample data is equal to a certain value. So, if we get a p-value below 0.05 then we can reject the null hypothesis that the mean of our data is equal to this value.
+- A two sample t-test is used to test if the mean of two independent samples are equal to each other. So, if we get a p-value below 0.05 then we can reject the null hypothesis that the means of the two samples are  equal
+
+```{r}
+# In order to make sure we are not breaking the assumptions of the t-test, I am going to quickly make a couple of samples for us. 
+sample_1 = rnorm(25, mean = 10, sd = 2.5)
+sample_2 = rnorm(50, mean = 13, sd = 2.5)
+
+# Now lets perform a one sample t-test using R's built in t.test function to test if the mean of sample 1 is equal to 7. 
+t.test(sample_1, mu = 7)
+```
+
+# Question 5.
+Perform a two sample t-test on our sample_1 and sample_2 vectors. Use the help() function to figure out how we can use the t.test function to do a two sample t-test. Please specify that the variances are equal for our 2 samples in this test. 
+
+```{r}
+t.test(sample_1, sample_2, var.equal = TRUE)
+```
+
