@@ -101,9 +101,7 @@ mean(x=vec2, na.rm = TRUE, trim = 0.1)
 Use the help command to look up how the quantile function works. After reading this, please calculate the quantiles of our vec2 vector using one of the continuous sample quantile types.  
 
 ```{r}
-help("quantile")
 
-quantile(x = vec2, na.rm = TRUE, type = 7)
 ```
 
 #Functions 3: Creating your own functions. 
@@ -206,8 +204,7 @@ print(sleepy_herbs)
 Subset our sleep_df dataframe to create a dataframe that only includes primates with a brain mass greater than 0.1 KG. Select only the name, order, and brainwt columns to stay in your final dataframe. Save this dataframe as a variable named smrt_monkeys. 
 
 ```{r}
-smrt_monkeys = subset(sleep_df, subset = (order == "Primates" & brainwt > 0.1), select = c(name,order,brainwt))
-print(smrt_monkeys)
+
 ```
 
 # Dataframes 3: Analyzing and adding to dataframes.   
